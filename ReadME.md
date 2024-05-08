@@ -27,6 +27,7 @@ Arguments are:
 
 
 ABC
+```
 cd  abc/
 ./abc
 read_genlib   directory of cadence library
@@ -35,4 +36,5 @@ strash
 refactor
 map
 write_verilog  directory
+```
 
