@@ -2,14 +2,13 @@
 
 module main ( 
     a, b, cin,
-    carry, sum  );
+    carry  );
   input  a, b, cin;
-  output carry, sum;
-  wire new_n6, new_n7, new_n8, new_n9, new_n10, new_n11, new_n12, new_n13,
-    new_n14, new_n16;
-  INVX1 g01 (.A(b), .Y(new_n7));
-  NOR2X1 g02(.A(new_n7), .B(new_n6), .Y(new_n16));
-  NOR2X1 g11(.A(new_n16), .B(new_n13), .Y(sum));
+  output carry;
+  wire new_n6, new_n7;
+  NOR2X1 g01(.A(a), .B(b), .Y(new_n6));
+  NOR2X1 g02(.A(a), .B(cin), .Y(new_n7));
+  NOR2X1 g11(.A(new_n6), .B(new_n7), .Y(carry));
 endmodule
 
 

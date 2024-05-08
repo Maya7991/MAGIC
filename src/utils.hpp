@@ -1,17 +1,12 @@
+#ifndef UTILS
+#define UTILS
+
 #include <cstring> // For strcmp
 #include <cstdlib> // For NULL definition
 #include <string>
 #include <fstream>
 #include <iostream>
-
-struct Gate {
-    std::string name;
-    std::string type;
-    std::vector<std::string> inputs;
-    std::string output;
-    int level;
-};
-
+#include"treeNor.hpp"
 
 /**
  * stores the name of Gates used in the library
@@ -45,3 +40,13 @@ std::string trim(const std::string& str);
 void printGates(const std::vector<Gate>& gates);
 
 void printLevelizedGates(const std::vector<Gate>& gates, int max_level);
+
+// Function to recursively print the tree structure
+void printGateTree(Gate* root, int level = 0);
+
+void print2D(Gate* root);
+
+// Function to print the crossbar array
+void printCrossbar(const std::vector<std::vector<Gate*>>& crossbar);
+
+#endif

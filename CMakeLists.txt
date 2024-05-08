@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(Verilog-levelizor)
+project(Magic)
 
 add_subdirectory(src)

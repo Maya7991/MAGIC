@@ -8,6 +8,8 @@
 #include"utils.hpp"
 // #include "keywords.hpp"
 
+#define COUNT 10
+
 std::string keywords[] = {  // Verilog keywords
     "module",
     "input",
@@ -95,5 +97,145 @@ void printLevelizedGates(const std::vector<Gate>& gates, int max_level){
             }
         }
         log << std::endl;
+    }
+}
+
+// Function to recursively print the tree structure
+// void printTree(TreeNode* node, int depth) {
+//     if (!node) return;
+//     for (int i = 0; i < depth; ++i)
+//         std::cout << "    ";
+//     std::cout << node->gate->name << " (" << node->gate->type << ")" << std::endl;
+//     for (TreeNode* child : node->children) {
+//         printTree(child, depth + 1);
+//     }
+// }
+
+void printGateTree(Gate* root, int level) {
+
+    
+
+    if (root == nullptr) {
+        return;
+    }
+    // Print information about the current gate
+    for (int i = 0; i < level; ++i) {
+        std::cout << "  "; // Indentation based on the depth of the node
+    }
+    std::cout << root->name << std::endl;
+
+    // Recursively print the children of the current gate
+    for (const auto& child : root->children) {
+        printGateTree(child, level - 1);
+    }
+}
+
+// Function to print binary tree in 2D
+// It does reverse inorder traversal
+// void print2DUtil(Gate* root, int space)
+// {
+//     // Base case
+//     if (root == NULL)
+//         return;
+ 
+//     // Increase distance between levels
+//     space += COUNT;
+ 
+//     // Process right child first
+//     if(root->children.size()>0){
+//         print2DUtil(root->children[0], space);
+//         // Print current node after space
+//         // count
+//         std::cout << std::endl;
+//         for (int i = COUNT; i < space; i++)
+//             std::cout << " ";
+//         std::cout << root->name << "\n";
+    
+//         // Process left child
+//         if(root->children.size()>1)
+//             print2DUtil(root->children[1], space);
+//         else{
+//             for (int i = COUNT; i < space; i++)
+//                 std::cout << " ";
+//             std::cout << root->name << "\n";
+//             print2DUtil(NULL, space);
+//         }
+            
+//     } 
+//     else
+//         std::cout << std::endl;
+//         for (int i = COUNT; i < space; i++)
+//             std::cout << " ";
+//         std::cout << root->name <<"°" << "\n";
+//         print2DUtil(NULL, space);
+ 
+    
+// }
+ 
+// // Wrapper over print2DUtil()
+// void print2D(Gate* root)
+// {
+//     // Pass initial space count as 0
+//     print2DUtil(root, 0);
+// }
+
+
+// -----------------
+
+void print2DUtil(Gate* root, int space)
+{
+    // Base case
+    if (root == NULL)
+        return;
+ 
+    // Increase distance between levels
+    space += COUNT;
+ 
+    // Process right child first
+    if (root->children.size() > 0) {
+        print2DUtil(root->children[0], space);
+        
+        // Print current node after space count
+        std::cout << std::endl;
+        for (int i = COUNT; i < space; i++)
+            std::cout << " ";
+        std::cout << root->name << "\n";
+    
+        // Process left child if exists
+        if (root->children.size() > 1)
+            print2DUtil(root->children[1], space);
+        else {
+            // std::cout<<"Only one baby\n";
+            // Print the current node again if there's no left child
+            for (int i = COUNT; i < space; i++)
+                std::cout << " ";
+            std::cout << root->name << "\n";
+            print2DUtil(NULL, space); // Recursive call with NULL to handle right side
+        }
+    } 
+    else {
+        // Print a newline if there are no children
+        std::cout << std::endl;
+        for (int i = COUNT; i < space; i++)
+            std::cout << " ";
+        std::cout << root->name <<"°" << "\n";
+        print2DUtil(NULL, space); // Recursive call with NULL to handle right side
+    }
+}
+ 
+// Wrapper over print2DUtil()
+void print2D(Gate* root)
+{
+    // Pass initial space count as 0
+    print2DUtil(root, 0);
+}
+
+// Function to print the crossbar array
+void printCrossbar(const std::vector<std::vector<Gate*>>& crossbar) {
+    for (const auto& level : crossbar) {
+        for (const auto& gate : level) {
+            std::cout << gate->name << " ";
+        }
+        std::cout << std::endl;
     }
 }

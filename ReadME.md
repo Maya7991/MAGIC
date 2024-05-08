@@ -14,10 +14,10 @@ To run the program:
 $ cd build
 $ make
 $ cd src
-$ ./levelizor <verilog_filename> <gate_filename>
+$ ./magic <verilog_filename> <gate_filename>
 ```
 
-Example: ```$ ./levelizor ../../../nor_files/test_nor2.v ../../examples/gate_info.txt```
+Example: ```$ ./magic ../../../nor_files/test_nor2.v ../../examples/gate_info.txt```
 
 
 Arguments are:

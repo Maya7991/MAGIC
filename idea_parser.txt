@@ -1,5 +1,61 @@
-idea_parser
+Tasks
+1. Integrate abc		- todo
+2. Parse 			- done
+3. levelize 			- done but no longer needed
+3. Build Tree			- done
+4. get opt criteria from user(latency/crossbar size) -todo
+5. micro file format discussion	- Inprogress
+6. Map based on latency		- done
+7. Map based on crossbar size	- todo
+8. code to generate micro file format(latency)	- done
 
+
+Parser
 Accept input files that has gate names. One gate name per line. Then store it as a vector.
+
+
+Algorithm- to create tree from netlist
+1. During parsing,create a vector of pointers that has po gates.
+2. Parsing completed.
+3. CreateNorTree start.
+4. If multi-output function use root <= createDummyroot() to create a dummy root with it's children as the pos. Else root <= po.
+5. q.push(root)
+6. Traverse through the queue(BFS) and connect each node with its children while pushing it to the queue and popping the processed node out of queue.
+7. End
+
+Edge case: For multi-output function, if the multiple outputs are already following hierarchy then creating a dummy root node might tamper with the functionality. check with Abhoy.=> remove the the output from the children of dummy root if output node comes up anywhere as input during the tree creation.
+
+Map Crossbar:std::map<int, std::vector<Gate*>> crossbar;
+From the tree, create a map of level and corresponding gates.
+
+writeMagic: 
+Primary inputs, need parsed object in a struct or something.
+1. NOT Gate-can have 1 child if input is gate or no child if input is pi
+	- NOT gate with 1 pi input
+	- NOT Gate with 1 child gate
+2. NOR gate with both primary inputs
+	- already placed pi
+	- new placement of pi
+3. NOR gate with 1 primary input and 1 child gate
+	- already placed pi/gate
+	- new placement of pi/gate
+4. NOR gate with 2 child gates
+	- already placed pi/gate
+	- new placement of pi/gate
+	
+Mapping Latency
+1. iterate through crossbar
+2. iterate gate->children, 
+3. if children->placed==true return address
+4. else children->placed=true, children->address=rowxcol
+
+
+
+
+
+
+
+
+
 
 
