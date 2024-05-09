@@ -10,7 +10,7 @@ module half_adder_structural (
   INVX1  g1(.A(b), .Y(new_n6));
   NOR2X1 g2(.A(new_n6), .B(new_n5), .Y(c));
   NOR2X1 g3(.A(b), .B(a), .Y(new_n8));
-  NOR2X1 g4(.A(new_n8), .B(a), .Y(s));
+  NOR2X1 g4(.A(new_n8), .B(c), .Y(s));
 endmodule
 
 

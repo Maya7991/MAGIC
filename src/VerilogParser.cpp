@@ -9,20 +9,21 @@
 #include"treeNor.hpp"
 #include"utils.hpp"
 
-
 class VerilogParser {
     private:
         std::string verilogfilename, gatefilename;
         std::vector<std::string> gatelibrary; 
         std::unordered_map<std::string, Gate*> gateMap;
         // std::vector<Gate*> gates;
-        std::vector<std::string> pi;
-        std::vector<std::string> po;
-        std::vector<Gate*> po_gates;
+        // std::vector<std::string> pi;
+        // std::vector<std::string> po;
+        // std::vector<Gate*> po_gates;
         std::string line;
         int line_number= 0;
 
-        void parseLine(const std::string& line, std::vector<Gate*>& gates) {
+        Netlist netlist;
+
+        void parseLine(const std::string& line) {
             std::istringstream iss(line);
             std::string token;
             iss >> token;
@@ -36,14 +37,14 @@ class VerilogParser {
             if(token=="input"){
                 std::string inputs;
                 while (std::getline(iss, inputs, ',')) {
-                    pi.push_back(trim(inputs));
+                    netlist.pi.push_back(trim(inputs));
                 }
             }
 
             if(token=="output"){
                 std::string outputs;
                 while (std::getline(iss, outputs, ',')) {
-                    po.push_back(trim(outputs));
+                    netlist.po.push_back(trim(outputs));
                 }
             }
             
@@ -84,15 +85,16 @@ class VerilogParser {
                 gate->inputs.pop_back();// remove last toke from input as its the output
                 gate->output = token;
                 gate->level = -1;
+                gate->placed = false;
 
                 //create a vector of pointers that has po gates. later used for nor tree
-                for(const auto& idx: po){
-                    if(gate->output == idx) po_gates.push_back(gate);
+                for(const auto& idx: netlist.po){
+                    if(gate->output == idx) netlist.po_gates.push_back(gate);
                 }
 
                 // Store gate in a map for quick access, remove this if not used
                 gateMap[gateName] = gate;
-                gates.push_back(gate);
+                netlist.gates.push_back(gate);
             }
 
         }
@@ -123,10 +125,10 @@ class VerilogParser {
 
     /* Constructor*/
     VerilogParser(const std::string& verilogfn, const std::string& gatefn){
+        // std::vector<Gate*> gates;
         storeGateInformation(gatefn);
-        verilogfilename = verilogfn;
+        netlist.verilogfilename = verilogfn;
         gatefilename = gatefn;
-
     }
 
     /**
@@ -134,37 +136,37 @@ class VerilogParser {
      * @param the gate level Verilog filename, Example: test.v
      * @return vector<Gate*> gates
      */
-    std::vector<Gate*> parseFile(const std::string& filename, std::vector<Gate*>& gates){
+    Netlist parseFile(){
 
-        std::ifstream file(filename);
+        std::ifstream file(netlist.verilogfilename);
         if (file.is_open()) {
             try{
                 while (std::getline(file, line, ';')) {
-                    parseLine(trim(line), gates);
+                    parseLine(trim(line));
                 }
             }
             catch(ce::CustomError& e){
                 throw e;
             }
-            std::cout<<"line_number: " <<line_number << ", Gates: "<< gates.size() << std::endl<< std::endl;
+            std::cout<<"line_number: " <<line_number << ", Gates: "<< netlist.gates.size() << std::endl<< std::endl;
             file.close();
         } else {
-            throw ce::CustomError("Unable to open Verilog file: "+filename);
+            throw ce::CustomError("Unable to open Verilog file: "+netlist.verilogfilename);
         }
         
         std::cout<<"Primary inputs-> ";
-        for(auto const& idx: pi){
+        for(auto const& idx: netlist.pi){
             std::cout << idx << ", ";
         }
 
         std::cout<<"\nPrimary outputs-> ";
-        for(auto const& idx: po){
+        for(auto const& idx: netlist.po){
             std::cout << idx << ", ";
         }
         std::cout <<std::endl;
 
         // return gates;
-        return po_gates;
+        return netlist;
 
     }
 

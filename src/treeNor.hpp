@@ -31,6 +31,17 @@ struct Gate {
     }
 };
 
+struct Netlist{
+    std::string verilogfilename;
+    std::vector<std::string> pi;
+    std::vector<std::string> po;
+    std::vector<Gate*> po_gates;
+    std::vector<Gate*> gates;
+
+    Netlist(){};
+    // Netlist(std::vector<Gate*>* gatesPtr) : gates(gatesPtr) {}
+};
+
 // TreeNode structure representing a gate node in the tree
 struct TreeNode {
     Gate* gate;

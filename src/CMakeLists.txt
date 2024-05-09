@@ -1,4 +1,4 @@
-add_executable(levelizor 
+add_executable(magic 
 main.cpp 
 VerilogParser.cpp 
 treeNor.hpp 

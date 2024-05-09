@@ -15,51 +15,40 @@ int main(int argc, char const *argv[])
     }
 
     try{
-        std::vector<Gate*> gates;
-        
         VerilogParser parser(argv[1], argv[2]);
-        // std::vector<Gate*> gates = parser.parseFile(argv[1]);
-        std::vector<Gate*> po_gates = parser.parseFile(argv[1], gates);
-        // for (const auto& gate : gates) {
-        //     std::cout << "Gate Info: " << gate->getInfo() << std::endl;
-        // }
-        Gate* root = constructNorTree(gates,po_gates);
+        // std::vector<Gate*> po_gates = parser.parseFile();
+        Netlist netlist = parser.parseFile();
+        Gate* root = constructNorTree(netlist.gates,netlist.po_gates);
 
         std::cout << "Root gate: " << root->name <<", Root children-" << root->children.size() <<std::endl;
-        // std::cout << "children " << root->children[0]->children.size() << std::endl;
         
-
         // print2D(root);
 
-        CrossbarMapper mapper(argv[1]);
-        std::vector<std::vector<Gate*>> crossbar = mapper.constructCrossbar(root);
-
-        mapper.mapToCrossbar(root);
+        CrossbarMapper mapper(netlist);
+        mapper.constructCrossbar(root);
         mapper.writeMagic();
 
-        // Print the crossbar array
-        std::cout << std::endl << "**** Printing Crossbar ****" << std::endl;
-        printCrossbar(crossbar);
-
-        
-
+        // std::cout << std::endl << "\n**** Printing Tree ****" << std::endl;
+        // for (const auto& gate : netlist.gates) {
+        //     std::cout<< gate->name << " ->" ;
+        //     for (const auto& child : gate->children)
+        //     {
+        //         std::cout<< child->name << ", " ;
+        //     }
+        //     std::cout << std::endl;
+        // }
 
 
         // Free memory for Pointers at the end of program
-        for (const auto& gate : gates) {
+        for (const auto& gate : netlist.gates) {
             delete gate;
         }
-        if (po_gates.size() > 1) {
+        if (netlist.po_gates.size() > 1) {
             delete root; // Delete the dummy root node if it was created
         }
-        // for (const auto& row : crossbar) {
-        //     for(const auto& gate : row){
-        //         delete gate;
-        //     }
-        // }
-
     }catch (ce::CustomError& e) {
 		std::cout << std::endl << "Error=> " << e.what() << std::endl << std::endl;
+        return 1;
 	}
     
     return 0;

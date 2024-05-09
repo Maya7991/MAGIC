@@ -68,6 +68,7 @@
         "codecvt": "cpp",
         "iomanip": "cpp",
         "cfenv": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "unordered_set": "cpp"
     }
 }

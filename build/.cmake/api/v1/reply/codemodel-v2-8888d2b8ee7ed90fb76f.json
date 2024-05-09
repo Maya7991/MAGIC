@@ -10,7 +10,7 @@
 					[
 						1
 					],
-					"jsonFile" : "directory-.-f5ebdc15457944623624.json",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.12"
@@ -20,7 +20,7 @@
 				},
 				{
 					"build" : "src",
-					"jsonFile" : "directory-src-b6cf2213fc5053b67c22.json",
+					"jsonFile" : "directory-src-Debug-b6cf2213fc5053b67c22.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.12"
@@ -34,7 +34,7 @@
 					]
 				}
 			],
-			"name" : "",
+			"name" : "Debug",
 			"projects" : 
 			[
 				{
@@ -43,7 +43,7 @@
 						0,
 						1
 					],
-					"name" : "Verilog-levelizor-v2",
+					"name" : "Magic",
 					"targetIndexes" : 
 					[
 						0
@@ -54,9 +54,9 @@
 			[
 				{
 					"directoryIndex" : 1,
-					"id" : "levelizor::@145eef247bfb46b6828c",
-					"jsonFile" : "target-levelizor-9381d97b74a085bbfcaf.json",
-					"name" : "levelizor",
+					"id" : "magic::@145eef247bfb46b6828c",
+					"jsonFile" : "target-magic-Debug-6221ba4c2c02e338ae3c.json",
+					"name" : "magic",
 					"projectIndex" : 0
 				}
 			]
@@ -65,8 +65,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/vboxuser/DFKI/MAGIC-project/Verilog-levelizor-v2/build",
-		"source" : "/home/vboxuser/DFKI/MAGIC-project/Verilog-levelizor-v2"
+		"build" : "/home/vboxuser/DFKI/MAGIC-project/Magic/build",
+		"source" : "/home/vboxuser/DFKI/MAGIC-project/Magic"
 	},
 	"version" : 
 	{

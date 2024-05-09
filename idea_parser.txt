@@ -8,6 +8,8 @@ Tasks
 6. Map based on latency		- done
 7. Map based on crossbar size	- todo
 8. code to generate micro file format(latency)	- done
+9. Print matrices		- todo
+10.Place outputs and inputs	- todo
 
 
 Parser

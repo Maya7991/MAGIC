@@ -1,0 +1,5 @@
+/home/vboxuser/DFKI/MAGIC-project/Magic/build/CMakeFiles/edit_cache.dir
+/home/vboxuser/DFKI/MAGIC-project/Magic/build/CMakeFiles/rebuild_cache.dir
+/home/vboxuser/DFKI/MAGIC-project/Magic/build/src/CMakeFiles/magic.dir
+/home/vboxuser/DFKI/MAGIC-project/Magic/build/src/CMakeFiles/edit_cache.dir
+/home/vboxuser/DFKI/MAGIC-project/Magic/build/src/CMakeFiles/rebuild_cache.dir

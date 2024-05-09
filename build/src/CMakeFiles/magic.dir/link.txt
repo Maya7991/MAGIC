@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/magic.dir/main.cpp.o CMakeFiles/magic.dir/VerilogParser.cpp.o CMakeFiles/magic.dir/CrossbarMapping.cpp.o CMakeFiles/magic.dir/utils.cpp.o -o magic 

@@ -39,11 +39,11 @@
 			[
 				{
 					"name" : "HELPSTRING",
-					"value" : "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ..."
+					"value" : "No help, variable specified on the command line."
 				}
 			],
 			"type" : "STRING",
-			"value" : ""
+			"value" : "Debug"
 		},
 		{
 			"name" : "CMAKE_CACHEFILE_DIR",
@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/vboxuser/DFKI/MAGIC-project/Verilog-levelizor-v2/build"
+			"value" : "/home/vboxuser/DFKI/MAGIC-project/Magic/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -519,11 +519,11 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "Enable/Disable output of compile commands during generation."
+					"value" : "No help, variable specified on the command line."
 				}
 			],
 			"type" : "BOOL",
-			"value" : ""
+			"value" : "TRUE"
 		},
 		{
 			"name" : "CMAKE_EXTRA_GENERATOR",
@@ -595,7 +595,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/vboxuser/DFKI/MAGIC-project/Verilog-levelizor-v2"
+			"value" : "/home/vboxuser/DFKI/MAGIC-project/Magic"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -839,7 +839,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "Verilog-levelizor-v2"
+			"value" : "Magic"
 		},
 		{
 			"name" : "CMAKE_RANLIB",
@@ -1122,7 +1122,7 @@
 			"value" : "FALSE"
 		},
 		{
-			"name" : "Verilog-levelizor-v2_BINARY_DIR",
+			"name" : "Magic_BINARY_DIR",
 			"properties" : 
 			[
 				{
@@ -1131,10 +1131,10 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/vboxuser/DFKI/MAGIC-project/Verilog-levelizor-v2/build"
+			"value" : "/home/vboxuser/DFKI/MAGIC-project/Magic/build"
 		},
 		{
-			"name" : "Verilog-levelizor-v2_IS_TOP_LEVEL",
+			"name" : "Magic_IS_TOP_LEVEL",
 			"properties" : 
 			[
 				{
@@ -1146,7 +1146,7 @@
 			"value" : "ON"
 		},
 		{
-			"name" : "Verilog-levelizor-v2_SOURCE_DIR",
+			"name" : "Magic_SOURCE_DIR",
 			"properties" : 
 			[
 				{
@@ -1155,7 +1155,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/vboxuser/DFKI/MAGIC-project/Verilog-levelizor-v2"
+			"value" : "/home/vboxuser/DFKI/MAGIC-project/Magic"
 		}
 	],
 	"kind" : "cache",

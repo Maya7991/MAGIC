@@ -1,0 +1,22 @@
+[
+{
+  "directory": "/home/vboxuser/DFKI/MAGIC-project/Magic/build/src",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/magic.dir/main.cpp.o -c /home/vboxuser/DFKI/MAGIC-project/Magic/src/main.cpp",
+  "file": "/home/vboxuser/DFKI/MAGIC-project/Magic/src/main.cpp"
+},
+{
+  "directory": "/home/vboxuser/DFKI/MAGIC-project/Magic/build/src",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/magic.dir/VerilogParser.cpp.o -c /home/vboxuser/DFKI/MAGIC-project/Magic/src/VerilogParser.cpp",
+  "file": "/home/vboxuser/DFKI/MAGIC-project/Magic/src/VerilogParser.cpp"
+},
+{
+  "directory": "/home/vboxuser/DFKI/MAGIC-project/Magic/build/src",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/magic.dir/CrossbarMapping.cpp.o -c /home/vboxuser/DFKI/MAGIC-project/Magic/src/CrossbarMapping.cpp",
+  "file": "/home/vboxuser/DFKI/MAGIC-project/Magic/src/CrossbarMapping.cpp"
+},
+{
+  "directory": "/home/vboxuser/DFKI/MAGIC-project/Magic/build/src",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/magic.dir/utils.cpp.o -c /home/vboxuser/DFKI/MAGIC-project/Magic/src/utils.cpp",
+  "file": "/home/vboxuser/DFKI/MAGIC-project/Magic/src/utils.cpp"
+}
+]
