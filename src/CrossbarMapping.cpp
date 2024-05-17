@@ -3,47 +3,85 @@
 #include <algorithm>
 #include <queue>
 #include <map>
+#include <unordered_set>
 #include"treeNor.hpp"
 #include"utils.hpp"
+#include"customError.hpp"
 
 class CrossbarMapper{
     private:
-    // std::map<int, std::vector<Gate*>> crossbar;
     std::vector<std::vector<Gate*>> crossbar;
     std::map<std::string, std::string> pi; // <pi_name, address>
     Netlist netlist;
-    
-
-    // std::string checkGate(Gate* gate, size_t index){
-    //     if(gate->placed){
-    //         return gate->address;
-    //     }
-    //     else{
-    //         gate->children;
-    //     }
-    // }
+    int max_rows = 0;
+    int num_copy = 0;
+    bool hasDummyRoot=false;
 
     public:
     CrossbarMapper(Netlist& netlist): netlist(netlist){};
 
     void map_latency(Gate* root){
-        std::queue<Gate*> q;
 
-        if(root->type == "Dummy"){ 
-            for (const auto& child_gate : root->children) {
-                q.push(child_gate);  // push children to q in case of a dummy root
+        if (!root) throw ce::CustomError("Root gate is null. Cannot construct crossbar array");
+
+        if(root->type == "Dummy") hasDummyRoot=true;
+
+        std::queue<Gate*> levelQueue;
+        levelQueue.push(root);
+        int level = 0;
+
+        while (!levelQueue.empty()) {
+            int levelSize = levelQueue.size();
+            std::vector<Gate*> levelGates;
+            std::unordered_set<Gate*> nextLevelGates;
+            level++;
+            
+            for (int i = 0; i < levelSize; ++i) {
+                Gate* currentGate = levelQueue.front();
+                levelQueue.pop();
+                
+                if (!currentGate->placed) {
+                    levelGates.push_back(currentGate);
+                    currentGate->placed = true;
+                    currentGate->level = level;
+
+                    for (Gate* child : currentGate->children) {
+                        if (child->placed) {
+                            auto& currentLevelGates = crossbar[child->level - 1];
+                            auto it = std::find(currentLevelGates.begin(), currentLevelGates.end(), child);
+                            if (it != currentLevelGates.end()) {
+                                currentLevelGates.erase(it);
+                                child->placed = false;
+                            }
+                        }
+                        nextLevelGates.insert(child);
+                    }
+                }
+            }
+
+            // Add the current level to the crossbar
+            crossbar.push_back(levelGates);
+
+            // Process next level gates
+            for (Gate* gate : nextLevelGates) {
+                bool canPlaceGate = true;
+                for (Gate* parent : gate->parents) {
+                    if (!parent->placed) {
+                        canPlaceGate = false;
+                        break;
+                    }
+                }
+                if (canPlaceGate) {
+                    levelQueue.push(gate);
+                }
             }
         }
-        else {
-            q.push(root);       // push root node to q
-        }
-        while(!q.empty())
-        {   
-            Gate* currentGate = q.front();
-            q.pop();
 
-        }
+        std::cout << std::endl << "**** Printing Crossbar ****" << std::endl;
+        printCrossbar(crossbar);
+        
     }
+
 
     // Function to construct the crossbar array
     void constructCrossbar(Gate* root) {
@@ -54,16 +92,17 @@ class CrossbarMapper{
         int level = 0;
 
         while (!levelQueue.empty()) {
-            int levelSize = levelQueue.size();
-            std::vector<Gate*> levelGates;
+            int levelSize = levelQueue.size();      // stores the number of gates at the current level
+            std::vector<Gate*> levelGates;          // store the gates at the current level
             std::vector<Gate*> nextLevelGates;
             std::queue<Gate*> nextLevelQueue;
             level ++;
+
             for (int i = levelSize; i > 0; --i) {
+
                 Gate* currentGate = levelQueue.front();
                 levelQueue.pop();
                 
-
                 // Enqueue children for the next level
                 if(!currentGate->placed){
                     // Add the gate to the current level
@@ -89,6 +128,7 @@ class CrossbarMapper{
                 }
             }
 
+            // checking for dependency in same level
             Gate* current;
             std::cout << std::endl;
             for (const auto& gate : nextLevelGates) {
@@ -114,8 +154,6 @@ class CrossbarMapper{
                     std::cout << "Pushing " << gate->name << " to queue\n";
                 }
             }
-
-
             // Add the current level to the crossbar
             crossbar.push_back(levelGates);
         }
@@ -124,42 +162,6 @@ class CrossbarMapper{
         printCrossbar(crossbar);
     }
 
-
-    void mapToCrossbar(Gate* root) {
-        if (!root)
-            return;
-
-        std::queue<Gate*> q;
-
-        q.push(root);
-        root->level = 0;
-
-        while (!q.empty()) {
-            Gate* gate = q.front();
-            q.pop();
-
-            // Place gate in crossbar at its level if it's not already placed
-            if (!gate->placed) {
-                crossbar[gate->level].push_back(gate);
-                gate->placed = true; // Mark gate as placed
-            }
-
-            // Push children to queue and assign levels
-            for (Gate* child : gate->children) {
-                child->level = gate->level + 1;
-                q.push(child);
-            }
-            
-        }
-
-        // Print crossbar
-        // for (auto& pair : crossbar) {
-        //     std::cout << "Level " << pair.first << ":\n";
-        //     for (Gate* gate : pair.second) {
-        //         std::cout << gate->getInfo() << std::endl;
-        //     }
-        // }
-    }
     
     void writeMagic(){
         
@@ -175,29 +177,35 @@ class CrossbarMapper{
             pi[input] = "";
         }
 
-        std::cout<<"Depth of crossbar \n" <<depth<<std::endl;
+        std::cout<<"Depth of crossbar " <<depth<<std::endl <<std::endl;
 
         for(int i=depth-1; i>= 0; i--){
             int row = 0;
             col_idx = col;
+            if(hasDummyRoot && i==0 && crossbar[i].size() ==1){continue;}
+
             outputFile << "Level " << i <<std::endl;
             for(const auto& gate: crossbar[i]){
                 col = col_idx;
                 
+                if(gate->type == "Dummy") continue;
                 // Place Primary inputs, need parsed object in a struct or something
                 // ------------------------
 
                 outputFile << gate->name << " => " << row << " False ";
 
-                
                 if(gate->inputs.size() == 1){   // NOT Gate-can have 1 child if input is gate or no child if input is pi
                     if(gate->children.size() == 0){ // NOT gate with 1 pi input
                         if(pi[gate->inputs[0]].empty()){
-                            outputFile << ++col << " /" << gate->inputs[0] << " " << ++col << " /" << gate->inputs[0] << " " ;
-                            pi[gate->inputs[0]] = std::to_string(row) + "x" + std::to_string(col); // save the address of pi                            
+                            outputFile << ++col << " /" << gate->inputs[0] << " " ;
+                            pi[gate->inputs[0]] = std::to_string(row) + "x" + std::to_string(col); // save the address of pi  
+                            outputFile << ++col << " " << pi[gate->inputs[0]] << " " ;
+                            num_copy++;   
+                            std::cout << "address of " << gate->inputs[0] << ":" <<pi[gate->inputs[0]] << std::endl;                     
                         }
                         else{                    
                             outputFile << ++col << " " << pi[gate->inputs[0]] << " " << ++col << " " << pi[gate->inputs[0]] << " ";
+                            num_copy++;
                         }
                         outputFile << ++col << " True " <<std::endl;
                     }
@@ -205,6 +213,7 @@ class CrossbarMapper{
                         Gate* child = gate->children[0];
                         if(child->placed){
                             outputFile << ++col << " " << child->address << " " << ++col << " " << child->address << " ";
+                            num_copy++;
                         }
                         else{
                             // child should always be placed already? If so no else case needed
@@ -216,7 +225,6 @@ class CrossbarMapper{
                     // std::cout<<gate->name << " -col: " << col << std::endl;
                     gate->placed = true;
                     gate->address = std::to_string(row) + "x" + std::to_string(col);
-                    std::cout<<gate->name << " , address: " << gate->address << std::endl;
                 }
                 // else if(gate->name == "g4"){
                 //     std::cout << gate->name <<std::endl;
@@ -228,40 +236,43 @@ class CrossbarMapper{
                         if(pi[input].empty()){
                             outputFile << ++col << " /" << input << " ";
                             pi[input] = std::to_string(row) + "x" + std::to_string(col); // save the address of pi  
-                            // outputFile << col++ << " " << pi[input] << " ";  
-                            std::cout<<"pi[input].empty() " <<input<<std::endl;                     
+                            std::cout << "address of " << input << ":" <<pi[input] << std::endl;
+                            // outputFile << col++ << " " << pi[input] << " ";                    
                         }
                         else{                    
                             outputFile << ++col << " " << pi[input] << " ";
-                            std::cout<<"address of "<<input<<":" <<pi[input]<<std::endl;
+                            num_copy++;
                         }                        
                     }
-                    outputFile << ++col << " °True " << std::endl;
+                    outputFile << ++col << " #True " << std::endl;
                     gate->placed = true;
                     gate->address = std::to_string(row) + "x" + std::to_string(col);
                 }
                 else if(gate->inputs.size() > 1 && gate->children.size() == 1){ // NOR gate with 1 primary input and 1 child gate
+                    std::cout << gate->name << std::endl;
                     for (const auto& input : gate->inputs){     // process pi
                         auto it = pi.find(input);
                         if (it != pi.end()) {
                             if(pi[input].empty()){
-                                outputFile << ++col << " /" << input << " " << ++col << " /" << input << " " ;
+                                outputFile << ++col << " /" << input << " " ;
                                 pi[input] = std::to_string(row) + "x" + std::to_string(col);  // save the address of pi                       
-                                std::cout<< input << " address :" <<pi[input] ;
+                                std::cout << "address of " << input << ":" <<pi[input] << std::endl;
                             }
                             else{                    
                                 outputFile << ++col<< " " << pi[input] << " " ;
+                                num_copy++;
                             }
                         }
                     }
                     Gate* child = gate->children[0];
                     if(child->placed){
                         outputFile << ++col << " " << child->address << " " ;
+                        num_copy++;
                     }
                     else{
                             outputFile << ++col << " not-placed " << " ";
                         }
-                    outputFile << ++col << " True " << std::endl;
+                    outputFile << ++col << " °True " << std::endl;
                     gate->placed = true;
                     gate->address = std::to_string(row) + "x" + std::to_string(col);
                 }
@@ -270,6 +281,7 @@ class CrossbarMapper{
                     for (const auto& child : gate->children){
                         if(child->placed){
                             outputFile << ++col << " " << child->address << " ";
+                            num_copy++;
                         }else{
                             outputFile << ++col << " not-placed " << " ";
                         }
@@ -280,7 +292,19 @@ class CrossbarMapper{
                     gate->address = std::to_string(row) + "x" + std::to_string(col);               
                 }
                 row++;
+                if(max_rows <  row) max_rows = row;
             }
         }
+
+        outputFile << std::endl << "\nOutputs are placed at : \n";
+        for (const auto& po_gate : netlist.po_gates)
+        {
+            outputFile << po_gate->output << " -> " << po_gate->address << std::endl;
+        }
+
+        outputFile << std::endl << "\nMetrics : \n";
+        outputFile << "Crossbar size    : " << max_rows << "x" << col+1 << std::endl;
+        outputFile << "Copy operations  : " << num_copy << std::endl;
+        
     }
 };

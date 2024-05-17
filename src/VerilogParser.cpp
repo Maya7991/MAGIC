@@ -13,7 +13,6 @@ class VerilogParser {
     private:
         std::string verilogfilename, gatefilename;
         std::vector<std::string> gatelibrary; 
-        std::unordered_map<std::string, Gate*> gateMap;
         // std::vector<Gate*> gates;
         // std::vector<std::string> pi;
         // std::vector<std::string> po;
@@ -49,7 +48,6 @@ class VerilogParser {
             }
             
             if(gate(token, gatelibrary)){
-                // Gate* gate;
                 std::string gateName, gateType;
                 size_t pos;
                 gateType = token;
@@ -87,13 +85,11 @@ class VerilogParser {
                 gate->level = -1;
                 gate->placed = false;
 
-                //create a vector of pointers that has po gates. later used for nor tree
+                //create a vector of pointers with po gates. later used for constructing NOR tree
                 for(const auto& idx: netlist.po){
                     if(gate->output == idx) netlist.po_gates.push_back(gate);
                 }
 
-                // Store gate in a map for quick access, remove this if not used
-                gateMap[gateName] = gate;
                 netlist.gates.push_back(gate);
             }
 
@@ -123,9 +119,11 @@ class VerilogParser {
 
     public:
 
-    /* Constructor*/
+    /* VerilogParser Constructor
+    * @param the gate level Verilog filename, name of file containing gates separated by newline
+    * @return 
+    */
     VerilogParser(const std::string& verilogfn, const std::string& gatefn){
-        // std::vector<Gate*> gates;
         storeGateInformation(gatefn);
         netlist.verilogfilename = verilogfn;
         gatefilename = gatefn;
@@ -134,7 +132,7 @@ class VerilogParser {
     /**
      * Parse the gate-level Verilog file
      * @param the gate level Verilog filename, Example: test.v
-     * @return vector<Gate*> gates
+     * @return Netlist 
      */
     Netlist parseFile(){
 
@@ -165,7 +163,8 @@ class VerilogParser {
         }
         std::cout <<std::endl;
 
-        // return gates;
+        printGates(netlist.gates);
+
         return netlist;
 
     }

@@ -16,8 +16,8 @@ int main(int argc, char const *argv[])
 
     try{
         VerilogParser parser(argv[1], argv[2]);
-        // std::vector<Gate*> po_gates = parser.parseFile();
         Netlist netlist = parser.parseFile();
+
         Gate* root = constructNorTree(netlist.gates,netlist.po_gates);
 
         std::cout << "Root gate: " << root->name <<", Root children-" << root->children.size() <<std::endl;
@@ -25,7 +25,7 @@ int main(int argc, char const *argv[])
         // print2D(root);
 
         CrossbarMapper mapper(netlist);
-        mapper.constructCrossbar(root);
+        mapper.map_latency(root);
         mapper.writeMagic();
 
         // std::cout << std::endl << "\n**** Printing Tree ****" << std::endl;

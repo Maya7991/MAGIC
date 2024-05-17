@@ -36,7 +36,7 @@ bool reserved (const std::string& word)
 /**
  * Determines if a string is gate
  * @param the string to check
- * @return whether the string is a gate or not
+ * @return True if string is a gate and False otherwise
  */
 bool gate (const std::string& word, std::vector<std::string>& gatelibrary)
 {
@@ -68,17 +68,16 @@ bool isSpaceNext(const std::string& input) {
     return false; // "INVX1" not found or no character after it
 }
 
-void printGates(const std::vector<Gate>& gates) {
+void printGates(const std::vector<Gate*>& gates) {
     for (const auto& gate : gates) {
-        std::cout << "Name: " << gate.name << std::endl;
-        std::cout << "Type: " << gate.type << std::endl;
+        std::cout << "Name: " << gate->name << " ,Type: " << gate->type << std::endl;
         std::cout << "Inputs:";
-        for (const auto& input : gate.inputs) {
+        for (const auto& input : gate->inputs) {
             std::cout << " " << input << ",";
         }
         std::cout << std::endl;
-        std::cout << "Output: " << gate.output << std::endl;
-        std::cout << "Level: " << gate.level << std::endl;
+        std::cout << "Output: " << gate->output << std::endl;
+        // std::cout << "Level: " << gate.level << std::endl;
         std::cout << std::endl;
     }
 }

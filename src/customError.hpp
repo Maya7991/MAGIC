@@ -1,4 +1,6 @@
-#pragma once
+#ifndef CUSTOMERROR
+#define CUSTOMERROR
+
 #include <stdexcept>
 #include <string>
 
@@ -21,3 +23,4 @@ namespace ce
 		}
 	};
 }
+#endif

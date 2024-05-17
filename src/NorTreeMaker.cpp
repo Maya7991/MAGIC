@@ -23,6 +23,7 @@ Gate* createDummyRoot(const std::vector<Gate*> po_gates){
     Gate* dummyGate = new Gate("Root","Dummy");
     for (const auto& gate : po_gates) {
         dummyGate->children.push_back(gate);    // Connect childNode to dummyRoot
+        gate->parents.push_back(dummyGate);     // Is this needed? If not remove this because this will introduce another erase operation.
     }
 
     return dummyGate;
@@ -31,8 +32,8 @@ Gate* createDummyRoot(const std::vector<Gate*> po_gates){
 /**
  * construct the tree structure from the parsed gates
  * 
- * @param po_gates A vector containing pointers to Gate objects representing primary output gates.
- * @param gates A vector containing pointers to Gate objects representing each gate in netlist.
+ * @param po_gates vector containing pointers to Gate objects representing primary output gates.
+ * @param gates vector containing pointers to Gate objects representing each gate in netlist.
  * @return A pointer to the root Gate of the tree
  */
 Gate* constructNorTree(const std::vector<Gate*>& gates, const std::vector<Gate*>& po_gates) {
@@ -43,39 +44,50 @@ Gate* constructNorTree(const std::vector<Gate*>& gates, const std::vector<Gate*>
     if(po_gates.size()>1){ 
         root = createDummyRoot(po_gates);
         for (const auto& gate : po_gates) { // push root only for normal cases, for createDummyRoot case, push the child here
-            q.push(gate);  // push po to q in case of a dummy root
+            q.push(gate);                   // push all po to q in case of a dummy root
         }
     }
     else {
         root = po_gates[0];
-        q.push(root);       // push root node to q
+        q.push(root);                       // push root node to q
     }
 
-    std::unordered_set<Gate*> addedChildren;
+    // Create a map from gate outputs to gate pointers for quick lookup
+    std::unordered_map<std::string, Gate*> outputToGateMap;
+    for (auto gate : gates) {
+        outputToGateMap[gate->output] = gate;
+    }
+
     while(!q.empty())
     {   
         Gate* currentGate = q.front();
-        // std::cout <<  std::endl << "currentGate: " << currentGate->name << std::endl;
         q.pop();
-        for(const auto& gate : gates){
-            if(currentGate->inputs.size() == currentGate->children.size()) break;
-            for(const auto& input: currentGate->inputs){
-                // std::cout << "checking child for input-> " << input ;
-                if(input == gate->output ){
-                    currentGate->children.push_back(gate);
-                    q.push(gate);
-                    addedChildren.insert(gate);
 
-                    if(currentGate->type != "Dummy") 
-                    {   // Erase the gate from root's children if it's in po_gates
-                        auto it = std::find(po_gates.begin(), po_gates.end(), gate);
-                        if (it != po_gates.end()) {
-                            root->children.erase(std::remove(root->children.begin(), root->children.end(), gate), root->children.end());
+        // for(const auto& gate : gates){
+            
+            
+            for(const auto& input: currentGate->inputs){    
+                // if(input == gate->output ){ 
+                if(currentGate->inputs.size() == currentGate->children.size()) break;   // removable?-break out of loop, if all inputs of current gate have already been found and added as child.                
+                if (outputToGateMap.find(input) != outputToGateMap.end()) {     // checking for child nodes
+                    Gate* gate = outputToGateMap[input];
+
+                    if (std::find(currentGate->children.begin(), currentGate->children.end(), gate) == currentGate->children.end()) {
+                        currentGate->children.push_back(gate);
+                        gate->parents.push_back(currentGate);
+                        q.push(gate);
+
+                        if(currentGate->type != "Dummy") 
+                        {   // Erase the gate from root's children if it's in po_gates
+                            auto it = std::find(po_gates.begin(), po_gates.end(), gate);
+                            if (it != po_gates.end()) {
+                                root->children.erase(std::remove(root->children.begin(), root->children.end(), gate), root->children.end());
+                            }
                         }
                     }
-                }                
+                }
             }            
-        }
+        // }
     }
     return root;
 }

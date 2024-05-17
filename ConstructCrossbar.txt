@@ -1,0 +1,4 @@
+Construct Crossbar Algorithm
+The function constructCrossbar is designed to construct a crossbar array (or crossbar switch) for a digital circuit using a level order traversal (breadth-first traversal) of the circuit's gate tree. The crossbar array represents the levels of the tree, where each level contains gates that can be executed in parallel without dependency conflicts.
+
+1.

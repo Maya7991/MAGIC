@@ -16,6 +16,7 @@ struct Gate {
     int level;
 
     std::vector<Gate*> children;
+    std::vector<Gate*> parents;
 
     Gate(){};
     Gate(std::string n, std::string t) : name(n), type(t) {}
@@ -39,7 +40,6 @@ struct Netlist{
     std::vector<Gate*> gates;
 
     Netlist(){};
-    // Netlist(std::vector<Gate*>* gatesPtr) : gates(gatesPtr) {}
 };
 
 // TreeNode structure representing a gate node in the tree

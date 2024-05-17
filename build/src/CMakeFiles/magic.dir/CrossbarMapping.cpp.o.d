@@ -179,6 +179,9 @@ src/CMakeFiles/magic.dir/CrossbarMapping.cpp.o: \
  /usr/include/c++/11/map /usr/include/c++/11/bits/stl_tree.h \
  /usr/include/c++/11/bits/stl_map.h \
  /usr/include/c++/11/bits/stl_multimap.h \
+ /usr/include/c++/11/unordered_set \
+ /usr/include/c++/11/bits/unordered_set.h \
  /home/vboxuser/DFKI/MAGIC-project/Magic/src/treeNor.hpp \
  /home/vboxuser/DFKI/MAGIC-project/Magic/src/utils.hpp \
- /usr/include/c++/11/cstring /usr/include/string.h /usr/include/strings.h
+ /usr/include/c++/11/cstring /usr/include/string.h /usr/include/strings.h \
+ /home/vboxuser/DFKI/MAGIC-project/Magic/src/customError.hpp

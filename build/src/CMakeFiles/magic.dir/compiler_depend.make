@@ -225,11 +225,14 @@ src/CMakeFiles/magic.dir/CrossbarMapping.cpp.o: ../src/CrossbarMapping.cpp \
   /usr/include/c++/11/bits/stl_tree.h \
   /usr/include/c++/11/bits/stl_map.h \
   /usr/include/c++/11/bits/stl_multimap.h \
+  /usr/include/c++/11/unordered_set \
+  /usr/include/c++/11/bits/unordered_set.h \
   ../src/treeNor.hpp \
   ../src/utils.hpp \
   /usr/include/c++/11/cstring \
   /usr/include/string.h \
-  /usr/include/strings.h
+  /usr/include/strings.h \
+  ../src/customError.hpp
 
 src/CMakeFiles/magic.dir/VerilogParser.cpp.o: ../src/VerilogParser.cpp \
   /usr/include/stdc-predef.h \
@@ -911,8 +914,6 @@ src/CMakeFiles/magic.dir/utils.cpp.o: ../src/utils.cpp \
   ../src/treeNor.hpp
 
 
-/usr/include/c++/11/bits/unordered_set.h:
-
 ../src/utils.cpp:
 
 ../src/NorTreeMaker.cpp:
@@ -926,6 +927,8 @@ src/CMakeFiles/magic.dir/utils.cpp.o: ../src/utils.cpp \
 /usr/include/c++/11/cstring:
 
 ../src/utils.hpp:
+
+/usr/include/c++/11/bits/unordered_set.h:
 
 /usr/include/c++/11/bits/stl_map.h:
 

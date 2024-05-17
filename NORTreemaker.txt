@@ -1,0 +1,12 @@
+NOR Tree Maker Algorithm- BFS traversal
+
+1. if multiple po, 
+	- root = create a dummy root with all po_gates as children
+	- push all po to the queue, do not push dummy root to queue
+2. else, root = po_gate and push the root to queue.
+3.  Create a map from gate outputs to gate pointers for quick lookup.  This allows us to quickly find the gate associated with any input without iterating through the entire list of gates. This is done only to avoid the nested loops and make code efficient.
+4. Traverse through the queue and repeat step 5 until q is empty
+5. Iterate through the inputs of currentGate. 
+	- find each input from map and assign the corresponding gate value as child of currentGate.
+	- if the child gate is also a po_gate, then remove it from the children of dummy_gate created earlier in step 1.
+6. End
