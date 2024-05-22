@@ -17,7 +17,8 @@ $ cd src
 $ ./magic <verilog_filename> <gate_filename>
 ```
 
-Example: ```$ ./magic ../../examples/nor_files/fa_nor2.v ../../examples/gate_info.txt
+Example: 
+```$ ./magic ../../examples/nor_files/fa_nor2.v ../../examples/gate_info.txt
 ```
 
 
