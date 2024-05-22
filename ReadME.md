@@ -25,6 +25,9 @@ Arguments are:
 1. verilog filename- This file contains the gate level verilog design that needs to be levelized.
 2. Gate filename- This file contains the name of gates in the gate library used to synthesize the design.
 
+MAGIC file format:
+row_num False col_num /pi col_num address col_num True 
+row_num False col_num address col_num address col_num True 
 
 
 ABC

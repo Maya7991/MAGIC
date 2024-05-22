@@ -28,17 +28,6 @@ int main(int argc, char const *argv[])
         mapper.map_latency(root);
         mapper.writeMagic();
 
-        // std::cout << std::endl << "\n**** Printing Tree ****" << std::endl;
-        // for (const auto& gate : netlist.gates) {
-        //     std::cout<< gate->name << " ->" ;
-        //     for (const auto& child : gate->children)
-        //     {
-        //         std::cout<< child->name << ", " ;
-        //     }
-        //     std::cout << std::endl;
-        // }
-
-
         // Free memory for Pointers at the end of program
         for (const auto& gate : netlist.gates) {
             delete gate;
