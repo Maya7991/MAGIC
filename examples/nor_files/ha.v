@@ -1,5 +1,3 @@
-// Benchmark "half_adder_structural" written by ABC on Thu Apr 18 09:29:25 2024
-
 module half_adder_structural ( 
     a, b,
     s, c  );

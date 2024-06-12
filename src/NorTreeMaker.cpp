@@ -40,23 +40,29 @@ Gate* constructNorTree(const std::vector<Gate*>& gates, const std::vector<Gate*>
 
     std::queue<Gate*> q;
     Gate* root = nullptr;
-
+    
     if(po_gates.size()>1){ 
+        std::cout<<"constructNorTree if begin" << std::endl;
         root = createDummyRoot(po_gates);
         for (const auto& gate : po_gates) { // push root only for normal cases, for createDummyRoot case, push the child here
             q.push(gate);                   // push all po to q in case of a dummy root
         }
+        std::cout<<"constructNorTree if end" << std::endl;
     }
     else {
+        std::cout<<"constructNorTree else begin" << std::endl;
         root = po_gates[0];
-        q.push(root);                       // push root node to q
+        q.push(root);         
+        std::cout<<"constructNorTree else end" << std::endl;              // push root node to q
     }
 
+    std::cout<<"constructNorTree after if else 54 " << std::endl;
     // Create a map from gate outputs to gate pointers for quick lookup
     std::unordered_map<std::string, Gate*> outputToGateMap;
     for (auto gate : gates) {
         outputToGateMap[gate->output] = gate;
     }
+    std::cout<<"constructNorTree 60 " << std::endl;
 
     while(!q.empty())
     {   

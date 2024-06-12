@@ -34,6 +34,7 @@ struct Gate {
 
 struct Netlist{
     std::string verilogfilename;
+    std::string module_name;
     std::vector<std::string> pi;
     std::vector<std::string> po;
     std::vector<Gate*> po_gates;

@@ -30,6 +30,14 @@ class VerilogParser {
             token = trim(token);
 
             if("//" == token) {
+                std::cout << "comment detected\n";
+                return;
+            }
+
+            if(token == "module") {
+                std::cout << "module detected\n";
+                iss >> token;
+                netlist.module_name = token;
                 return;
             }
 
@@ -81,7 +89,7 @@ class VerilogParser {
                     gate->inputs.push_back(token);
                 }
                 gate->inputs.pop_back();// remove last toke from input as its the output
-                gate->output = token;
+                gate->output = trim(token);
                 gate->level = -1;
                 gate->placed = false;
 
@@ -92,6 +100,9 @@ class VerilogParser {
 
                 netlist.gates.push_back(gate);
             }
+            // else{
+            //     std::cout << token <<"\n";
+            // }
 
         }
 
@@ -163,7 +174,8 @@ class VerilogParser {
         }
         std::cout <<std::endl;
 
-        printGates(netlist.gates);
+        // printGates(netlist.gates);
+        std::cout<<"\nGates-> " << netlist.gates.size() <<std::endl;
 
         return netlist;
 

@@ -1,0 +1,12 @@
+// Benchmark "half_adder_structural" written by ABC on Wed May 29 11:51:33 2024
+
+module half_adder_structural ( 
+    a, b,
+    s, c  );
+  input  a, b;
+  output s, c;
+  assign s = a ^ b;
+  assign c = a & b;
+endmodule
+
+
