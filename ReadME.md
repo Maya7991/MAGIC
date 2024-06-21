@@ -17,11 +17,12 @@ To run the program:
 $ cd build
 $ make
 $ cd src
-$ ./magic <verilog_filename> <gate_filename>
+$ ./magic <mode> <verilog_filename> <gate_filename>
+-- Mode can be buffer or normal
 ```
 
 Example: 
-```$ ./magic mode ../../examples/nor_files/fa_nor2.v ../../examples/gate_info.txt
+```$ ./magic buffer ../../examples/nor_files/fa_nor2.v ../../examples/gate_info.txt
 ```
 
 

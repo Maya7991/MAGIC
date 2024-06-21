@@ -1,0 +1,8 @@
+GATE buf1   0.798000  Y=A;          PIN * NONINV  1    999  0.01   0.3   0.01   0.3
+GATE inv1    0.532000  Y=!A;         PIN * INV     1    999  0.06   0.3   0.06   0.3
+GATE nor2   1.064000 Y=!(A+B);        PIN * INV  1    999  0.154  0.3   0.154  0.3
+
+
+
+GATE zero	0	Y=CONST0;
+GATE one	0	Y=CONST1;
