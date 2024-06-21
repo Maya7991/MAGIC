@@ -1,3 +1,6 @@
+Detailed description of all algorithms can be found in Documentation folder.
+
+
 To build the program for the first time:
 1. Delete all makefiles in the build folder
 
@@ -18,7 +21,7 @@ $ ./magic <verilog_filename> <gate_filename>
 ```
 
 Example: 
-```$ ./magic ../../examples/nor_files/fa_nor2.v ../../examples/gate_info.txt
+```$ ./magic mode ../../examples/nor_files/fa_nor2.v ../../examples/gate_info.txt
 ```
 
 

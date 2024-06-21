@@ -13,8 +13,8 @@ class CrossbarMapper{
     std::vector<std::vector<Gate*>> crossbar;
     std::map<std::string, std::string> pi; // <pi_name, address>
     Netlist netlist;
-    int max_rows = 0;
-    int num_copy = 0;
+    int max_rows, cuts_count, num_copy= 0;
+    int  buffer_size = 0;
     bool hasDummyRoot=false;
 
     public:
@@ -44,6 +44,8 @@ class CrossbarMapper{
                     levelGates.push_back(currentGate);
                     currentGate->placed = true;
                     currentGate->level = level;
+                    if(i != 0)
+                        {cuts_count = (currentGate->type=="NOT")? cuts_count+1 : cuts_count+2;}
 
                     for (Gate* child : currentGate->children) {
                         if (child->placed) {
@@ -75,6 +77,10 @@ class CrossbarMapper{
                     levelQueue.push(gate);
                 }
             }
+
+            if(buffer_size <  cuts_count) buffer_size = cuts_count;
+            std::cout << "Level " << level << ": " << cuts_count << std::endl ;
+            cuts_count = 0;
         }
 
         std::cout << std::endl << "**** Printing Crossbar ****" << std::endl;
@@ -309,15 +315,18 @@ class CrossbarMapper{
 
         int init_count = crossbar.size()*2;
         int cols = 3*(crossbar.size()-1);           // 3*levels
-        int write_oper = 2*(crossbar.size()-1) + 1; // 3+((crossbar.size()-1)*2);
-
+        // int write_oper = netlist.mode== Mode::Buffer ? (2*(crossbar.size()-1) + 1) : (3*(crossbar.size()-1) + 1); // 3+((crossbar.size()-1)*2);
+        int write_oper = netlist.mode== Mode::Buffer ? (2*(crossbar.size()-1) + 1) : (2*netlist.gates.size()+1);
+        int read_oper = netlist.mode== Mode::Buffer ? depth-1 : 2*netlist.gates.size();
         outputFile << std::endl << "\nMetrics : \n";
         outputFile << "Levels             : " << depth-1 << std::endl;
-        outputFile << "read operations    : " <<  depth-1 << std::endl;
+        outputFile << "read operations    : " << read_oper << std::endl;
         outputFile << "write operations   : " << write_oper << std::endl;
         outputFile << "Evaluation cycles  : " << crossbar.size()-1 << std::endl;
-        outputFile << "Total cycles       : " << 4*(depth-1) +1 << std::endl;
-        outputFile << "Crossbar size      : " << max_rows << "x" << cols<< std::endl;
+        // outputFile << "Total cycles       : " << 4*(depth-1) +1 << std::endl;
+        outputFile << "Total cycles       : " << read_oper+write_oper+(crossbar.size()-1) << std::endl;
+        // outputFile << "Buffer size        : " << buffer_size << std::endl;
+        outputFile << "Crossbar size      : " << max_rows << "x" << cols << std::endl;
         
         
     }

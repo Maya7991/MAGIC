@@ -49,4 +49,10 @@ void print2D(Gate* root);
 // Function to print the crossbar array
 void printCrossbar(const std::vector<std::vector<Gate*>>& crossbar);
 
+// Function to convert mode to string (for output purposes)
+std::string modeToString(Mode mode);
+
+// Function to convert string to mode enum
+Mode stringToMode(const std::string& modeStr);
+
 #endif

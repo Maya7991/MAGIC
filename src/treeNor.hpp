@@ -4,6 +4,11 @@
 #include<string>
 #include<vector>
 
+enum class Mode {
+    Buffer,
+    Normal
+};
+
 struct Gate {
     std::string name;
     std::string type;
@@ -35,6 +40,7 @@ struct Gate {
 struct Netlist{
     std::string verilogfilename;
     std::string module_name;
+    Mode mode;
     std::vector<std::string> pi;
     std::vector<std::string> po;
     std::vector<Gate*> po_gates;

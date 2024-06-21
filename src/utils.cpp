@@ -99,6 +99,26 @@ void printLevelizedGates(const std::vector<Gate>& gates, int max_level){
     }
 }
 
+// Function to convert mode to string (for output purposes)
+std::string modeToString(Mode mode) {
+    switch (mode) {
+        case Mode::Buffer: return "buffer mode";
+        case Mode::Normal: return "normal mode";
+        default: return "";
+    }
+}
+
+// Function to convert string to mode enum
+Mode stringToMode(const std::string& modeStr) {
+    if (modeStr == "buffer") {
+        return Mode::Buffer;
+    } else if (modeStr == "normal") {
+        return Mode::Normal;
+    } else {
+        throw std::invalid_argument("Invalid mode argument");
+    }
+}
+
 // Function to recursively print the tree structure
 // void printTree(TreeNode* node, int depth) {
 //     if (!node) return;

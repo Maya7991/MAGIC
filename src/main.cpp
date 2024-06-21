@@ -25,9 +25,10 @@ std::string preprocessWithABC(const std::string& inputFile, const std::string& l
 
 int main(int argc, char const *argv[])
 {
-    if (argc != 3) {
+    if (argc != 4) {
         std::cerr << std::endl << "Incorrect Usage!"<< std::endl;
-        std::cerr << "Usage: " << argv[0] << " <verilog_file> <gate_info_file>" << std::endl << std::endl;
+        std::cerr << "Usage: " << argv[0] << " <mode> <verilog_file> <gate_info_file>" << std::endl << std::endl;
+        std::cerr << "Mode options: buffer, normal" << std::endl;
         return 1; // Return 1 to indicate incorrect usage
     }
 
@@ -36,8 +37,13 @@ int main(int argc, char const *argv[])
         // abc_outFile = preprocessWithABC(argv[1], argv[2]);
         // VerilogParser parser(abc_outFile, argv[2]);
 
-        VerilogParser parser(argv[1], argv[2]);
+        Mode mode = stringToMode(argv[1]);
+        std::cout << "Starting in " << modeToString(mode) << std::endl;
+
+        VerilogParser parser(argv[2], argv[3]);
         Netlist netlist = parser.parseFile();
+        netlist.mode= mode;
+
         
         Gate* root = constructNorTree(netlist.gates,netlist.po_gates);
 
@@ -57,6 +63,11 @@ int main(int argc, char const *argv[])
         if (netlist.po_gates.size() > 1) {
             delete root; // Delete the dummy root node if it was created
         }
+    }catch (const std::invalid_argument& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        std::cerr << "Usage: " << argv[0] << " <mode> <verilog_file> <gate_info_file>" << std::endl;
+        std::cerr << "Mode options: buffer, normal" << std::endl;
+        return 1;
     }catch (ce::CustomError& e) {
 		std::cout << std::endl << "Error=> " << e.what() << std::endl << std::endl;
         return 1;
